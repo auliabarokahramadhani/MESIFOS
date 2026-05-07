@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sintaks 4: Verifikasi Hasil Analisis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), 
+                        url('background.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- Navigasi --- */
+        .nav-header {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-nav {
+            padding: 8px 15px;
+            background: white;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 0.8rem;
+            border: 2px solid #81c784;
+        }
+
+        /* --- Konten Verifikasi --- */
+        .content-wrapper {
+            flex: 1;
+            width: 95%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 30px;
+        }
+
+        .instruction-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #2e7d32;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .verif-card {
+            background: white;
+            width: 100%;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 5px solid #ffffff;
+        }
+
+        .case-reminder {
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            border-left: 5px solid #ff9800;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f1f8e9;
+            border: 2px solid #a5d6a7;
+            border-radius: 15px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .option-btn:hover { background: #dcedc8; }
+
+        /* --- Feedback Styles --- */
+        #feedback-area {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            display: none;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .clue-style { background: #fff9c4; border: 2px solid #fbc02d; color: #856404; }
+        .success-style { background: #c8e6c9; border: 2px solid #2e7d32; color: #1b5e20; }
+
+        .btn-finish {
+            .btn-finish {
+    display: inline-block; /* Diubah agar tombol langsung muncul */
+    margin-top: 20px;
+    padding: 12px 40px;
+    background: linear-gradient(45deg, #ff9800, #ffb74d);
+    color: white;
+    text-decoration: none;
+    border-radius: 100px;
+    font-weight: bold;
+    box-shadow: 0 5px 0 #e65100;
+}
+        }
+    </style>
+</head>
+<body>
+
+    <header class="nav-header">
+        <a href="data-processing.html" class="btn-nav">← Cek Data Lagi</a>
+        <a href="index.html" class="btn-nav">🏠 Home</a>
+    </header>
+
+    <main class="content-wrapper">
+        <div class="instruction-box">
+            <h2>Uji Verifikasi Analisis 🧪</h2>
+            <p>Bandingkan hasil olah datamu dengan pilihan pernyataan di bawah ini.</p>
+        </div>
+
+        <div class="verif-card">
+            <div class="case-reminder">
+                <strong>Ingat Kasus:</strong> Limbah membunuh semua larva nyamuk. Apa dampak bagi nyamuk dewasa dalam 2 minggu?
+            </div>
+
+            <button class="option-btn" onclick="checkVerif(1)">
+                A. Populasi nyamuk dewasa akan langsung hilang besok karena larva adalah sumber utama nyamuk.
+            </button>
+            
+            <button class="option-btn" onclick="checkVerif(2)">
+                B. Populasi nyamuk dewasa tetap ada untuk sementara, namun akan hilang total setelah nyamuk yang ada mati tanpa ada penggantinya.
+            </button>
+
+            <button class="option-btn" onclick="checkVerif(3)">
+                C. Tidak ada dampak sama sekali karena nyamuk dewasa tidak hidup di dalam air yang tercemar.
+            </button>
+
+            <div id="feedback-area"></div>
+            
+            <center>
+                <a href="kesimpulan.html" id="next-btn" class="btn-finish">Sempurnakan Kesimpulan ➔</a>
+            </center>
+        </div>
+    </main>
+
+    <script>
+        function checkVerif(choice) {
+            const fb = document.getElementById('feedback-area');
+            const next = document.getElementById('next-btn');
+            fb.style.display = "block";
+
+            if (choice === 2) {
+                fb.className = "success-style";
+                fb.innerHTML = "✅ TEPAT SEKALI! <br><small>Karena siklus terputus di tahap larva, tidak akan ada pupa baru yang berubah menjadi nyamuk dewasa.</small>";
+                next.style.display = "inline-block";
+            } else if (choice === 1) {
+                fb.className = "clue-style";
+                fb.innerHTML = "🔍 PETUNJUK (CLUE): <br><small>Pikirkan lagi! Nyamuk dewasa yang sudah terbang hari ini tidak ikut mati. Berapa lama umur nyamuk dewasa sebelum mereka butuh generasi baru?</small>";
+                next.style.display = "none";
+            } else {
+                fb.className = "clue-style";
+                fb.innerHTML = "🔍 PETUNJUK (CLUE): <br><small>Nyamuk dewasa memang tidak di air, tapi dari mana nyamuk dewasa itu berasal? Ingat urutan Telur -> Larva -> Pupa!</small>";
+                next.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

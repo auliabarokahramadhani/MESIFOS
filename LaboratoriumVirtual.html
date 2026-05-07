@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi: Pengumpulan Data Metamorfosis </title>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Comic Sans MS', sans-serif; }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), 
+                        url('background.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header-section { text-align: center; margin-bottom: 15px; }
+        .header-section h1 { color: #1b5e20; font-size: 2.2rem; text-shadow: 2px 2px 0 white; }
+        
+        .mission-instruction {
+            background: #fff9c4;
+            border: 3px dashed #fbc02d;
+            padding: 15px 25px;
+            border-radius: 20px;
+            max-width: 900px;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #5d4037;
+        }
+
+        .progress-tracker {
+            background: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 25px;
+            border: 2px solid #a5d6a7;
+        }
+
+        /* --- Grid Kartu Data (3 Kolom) --- */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .data-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border: 3px solid #e0e0e0;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 0 #e0e0e0;
+        }
+
+        .data-card:hover { transform: translateY(-5px); border-color: #81c784; }
+
+        .data-card.completed {
+            background: #f1f8e9;
+            border-color: #4caf50;
+            box-shadow: 0 6px 0 #388e3c;
+        }
+
+        .data-card.wrong-selected {
+            background: #ffebee;
+            border-color: #f44336;
+            box-shadow: 0 6px 0 #d32f2f;
+        }
+
+        .card-icon { width: 60px; height: 60px; object-fit: contain; }
+        .card-info h3 { color: #2e7d32; font-size: 1rem; }
+        .card-info p { font-size: 0.75rem; color: #757575; }
+
+        /* --- Popup Modal --- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .data-content {
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .data-content h2 { color: #1b5e20; margin-bottom: 15px; border-bottom: 2px solid #a5d6a7; padding-bottom: 10px; }
+        .data-content p { line-height: 1.6; color: #4e342e; font-size: 1rem; text-align: justify; margin-bottom: 20px; }
+
+        .btn-collect {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #1b5e20;
+        }
+
+        /* --- Tombol Selesai --- */
+        #btn-next-step {
+            display: none;
+            margin: 30px 0;
+            padding: 15px 40px;
+            background: #ff9800;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 6px 0 #e65100;
+        }
+
+        @media (max-width: 900px) { .data-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .data-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+
+<body>
+
+<div class="header-section">
+    <h1>🌸 PENGUMPULAN DATA 🕵️‍♂️</h1>
+</div>
+
+<div class="mission-instruction">
+    <p>Halo anak anak! Temukan dan olah <strong>5 data relevan</strong> untuk menemukan penyelesaian masalah di tahap stimulasi. Hati-hati, ada 1 data jebakan yang tidak berhubungan dengan metamorfosis!</p>
+</div>
+
+<div class="progress-tracker">
+    Data Terverifikasi: <span id="count">0</span> / 5
+</div>
+
+<main class="data-grid">
+    <!-- Box 1 -->
+    <div class="data-card" onclick="openModal('siklus')">
+        <img src="daurhidup.png" class="card-icon" alt="Ikon">
+        <div class="card-info">
+            <h3>Siklus Hidup</h3>
+            <p>Klik untuk analisis...</p>
+        </div>
+    </div>
+
+    <!-- Box 2 -->
+    <div class="data-card" onclick="openModal('apa_meta')">
+        <img src="daurhidup2.png" class="card-icon" alt="Ikon">
+        <div class="card-info">
+            <h3>Apa itu Metamorfosis?</h3>
+            <p>Klik untuk analisis...</p>
+        </div>
+    </div>
+
+    <!-- Box 3 -->
+    <div class="data-card" onclick="openModal('sempurna')">
+        <img src="daurhidup.png" class="card-icon" alt="Ikon">
+        <div class="card-info">
+            <h3>Metamorfosis Sempurna</h3>
+            <p>Klik untuk analisis...</p>
+        </div>
+    </div>
+
+    <!-- Box 4 -->
+    <div class="data-card" onclick="openModal('kata_kunci')">
+        <img src="buku.png" class="card-icon" alt="Ikon">
+        <div class="card-info">
+            <h3>Kata Kunci Penting</h3>
+            <p>Klik untuk analisis...</p>
+        </div>
+    </div>
+
+    <!-- Box 5 (Baru: Gangguan) -->
+    <div class="data-card" onclick="openModal('gangguan')">
+        <img src="daurhidup2.png" class="card-icon" alt="Ikon">
+        <div class="card-info">
+            <h3>Merawat Hewan Piaraan</h3>
+            <p>Klik untuk analisis...</p>
+        </div>
+    </div>
+
+    <!-- Box 6 (Baru: Selain Kupu-kupu) -->
+    <div class="data-card" onclick="openModal('selain_kupu')">
+        <img src="daurhidup.png" class="card-icon" alt="Ikon">
+        <div class="card-info">
+            <h3>Metamorfosis Lainnya</h3>
+            <p>Klik untuk analisis...</p>
+        </div>
+    </div>
+</main>
+
+<a href="Game.html" id="btn-next-step">Analisis Data Selesai ▶</a>
+
+<div id="overlay" class="overlay">
+    <div class="data-content">
+        <h2 id="modal-title">Judul Data</h2>
+        <p id="modal-text"></p>
+        <div id="modal-footer">
+            <button class="btn-collect" id="action-btn" onclick="collectData()">Simpan
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let collectedCount = 0;
+    let currentId = "";
+    const collectedList = new Set();
+    const totalRequired = 5;
+
+    const dataMateri = {
+        'siklus': {
+            title: "Siklus Hidup",
+            text: "Makhluk hidup butuh berkembang biak untuk mempertahankan keturunan atau jenisnya di Bumi. Maksudnya berkembang biak adalah menghasilkan keturunannya. Siklus hidup adalah tahapan kehidupan yang dialami makhluk hidup sejak lahir hingga mati.",
+            isRelevant: true
+        },
+        'apa_meta': {
+            title: "Apa itu Metamorfosis?",
+            text: "Metamorfosis adalah perubahan bentuk pada siklus hidup makhluk hidup. Terbagi menjadi metamorfosis sempurna dan tidak sempurna.",
+            isRelevant: true
+        },
+        'sempurna': {
+            title: "Metamorfosis Sempurna",
+            text: "Mengalami 4 fase: Telur → Larva → Pupa → Imago. Bentuk bayi sangat berbeda dengan bentuk dewasanya. Tahap 1 yaitu telur. Siklus hidup dimulai dari telur. Induk kupu-kupu biasanya meletakkan telurnya di bawah permukaan daun agar aman dari pemangsa. Telur ini berukuran sangat kecil namun menyimpan calon kehidupan baru. Selanjutnya tahap 2 larva. Setelah menetas, muncullah Larva atau ulat. Tugas utama ulat hanya satu yaitu makan. Ia akan memakan banyak daun untuk menyimpan energi yang besar bagi pertumbuhannya. Di tahap ini, ulat akan berganti kulit beberapa kali. Selanjutnya tahap 3 adalah pupa. Ini adalah tahap yang paling ajaib! Ulat akan membungkus dirinya menjadi kepompong. Di dalamnya, tubuh ulat 'hancur' dan menyusun ulang dirinya menjadi bentuk yang sama sekali baru. Tahap ini adalah ciri khas metamorfosis sempurna. Terakhir tahap 4 adalah imago. Kepompong terbuka dan keluarlah Imago atau hewan dewasa (Kupu-kupu). Ia akan mengembangkan sayapnya yang indah, belajar terbang, dan siap untuk memulai siklus hidup yang baru kembali",
+            isRelevant: true
+        },
+        'kata_kunci': {
+            title: "Kata Kunci ",
+            text: "Hampir semua serangga bermetamorfosis. Contoh lain selain serangga adalah katak, salamander, dan lobster.",
+            isRelevant: true
+        },
+        'gangguan': {
+            title: "Cara Merawat Kucing",
+            text: "Kucing membutuhkan makanan bergizi, tempat tinggal bersih, dan kasih sayang agar tetap sehat. (Data ini tidak relevan dengan Metamorfosis).",
+            isRelevant: false
+        },
+        'selain_kupu': {
+            title: "Selain Kupu-kupu",
+            text: "Metamorfosis sempurna juga dialami Lalat (Telur-Larva/Belatung-Pupa-Lalat) dan Katak (Telur-Berudu-Katak Muda-Katak Dewasa).",
+            isRelevant: true
+        }
+    };
+
+    function openModal(id) {
+        currentId = id;
+        const data = dataMateri[id];
+        document.getElementById('modal-title').innerText = data.title;
+        document.getElementById('modal-text').innerText = data.text;
+        
+        const btn = document.getElementById('action-btn');
+        if (data.isRelevant) {
+            btn.innerText = "Simpan";
+            btn.style.background = "linear-gradient(135deg, #4caf50, #2e7d32)";
+        } else {
+            btn.innerText = "Simpan";
+            btn.style.background = "linear-gradient(135deg, #f44336, #d32f2f)";
+        }
+        
+        document.getElementById('overlay').style.display = "flex";
+    }
+
+    function collectData() {
+        const data = dataMateri[currentId];
+        const cards = document.querySelectorAll('.data-card');
+
+        if (data.isRelevant) {
+            if (!collectedList.has(currentId)) {
+                collectedList.add(currentId);
+                cards.forEach(card => {
+                    if(card.getAttribute('onclick').includes(currentId)) {
+                        card.classList.add('completed');
+                        card.querySelector('p').innerText = "✅ Data tersimpan";
+                    }
+                });
+                collectedCount = collectedList.size;
+                document.getElementById('count').innerText = collectedCount;
+            }
+        } else {
+            cards.forEach(card => {
+                if(card.getAttribute('onclick').includes(currentId)) {
+                    card.classList.add('wrong-selected');
+                    card.querySelector('p').innerText = "❌ Data diabaikan";
+                }
+            });
+            alert("Kerja bagus! Kamu berhasil mendeteksi data yang tidak relevan.");
+        }
+
+        document.getElementById('overlay').style.display = "none";
+
+        if (collectedCount === totalRequired) {
+            document.getElementById('btn-next-step').style.display = "inline-block";
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    }
+
+
+</script>
+<div class="footer-section">
+    <a href="Verification.html" class="btn-finish">Klik Selanjutnya ▶</a>
+</div>
+
+</body>
+</html>
+</body>
+</html>
